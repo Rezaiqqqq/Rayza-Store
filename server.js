@@ -1,8 +1,7 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;  // بورت بيئة التشغيل أو 3000
 
-// نعرض صفحة النبذة
 app.get('/', (req, res) => {
   res.send(`
     <!DOCTYPE html>
@@ -16,8 +15,8 @@ app.get('/', (req, res) => {
         body {
           margin: 0;
           font-family: 'Cairo', sans-serif;
-          background: #e0f7fa; /* سماوي فاتح */
-          color: #01579b; /* أزرق قوي */
+          background: #e0f7fa;
+          color: #01579b;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -70,7 +69,6 @@ app.get('/', (req, res) => {
           transform: scale(1.05);
           box-shadow: 0 6px 16px rgba(1,87,155,0.6);
         }
-        /* أيقونات بسيطة من SVG */
         .btn svg {
           width: 20px;
           height: 20px;
@@ -107,5 +105,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Rayza Store app listening at http://localhost:${port}`);
+  console.log(\`Server running on port \${port}\`);
 });
