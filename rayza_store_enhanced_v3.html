@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>رايزا ستور - Rayza Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@200;300;400;500;700;800;900&family=Amiri:wght@400;700&family=Cairo:wght@200;300;400;600;700;800;900&family=Lalezar&family=Changa:wght@200;300;400;500;600;700;800&display=swap');
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        :root {
+            --primary-blue: #007AFF;
+            --secondary-blue: #5AC8FA;
+            --dark-blue: #0051D5;
+            --light-gray: #F2F2F7;
+            --medium-gray: #8E8E93;
+            --dark-gray: #1C1C1E;
+            --white: #FFFFFF;
+            --black: #000000;
+            --gradient-primary: linear-gradient(135deg, #007AFF 0%, #5AC8FA 100%);
+            --gradient-secondary: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+            --shadow-light: 0 4px 20px rgba(0, 122, 255, 0.15);
+            --shadow-medium: 0 8px 40px rgba(0, 122, 255, 0.2);
+            --shadow-heavy: 0 20px 60px rgba(0, 122, 255, 0.3);
+        }
+        
+        body {
+            font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: var(--white);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Top Status Bar */
+        .status-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status-left {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .battery {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .battery-icon {
+            width: 24px;
+            height: 12px;
+            border: 1px solid white;
+            border-radius: 2px;
+            position: relative;
+        }
+        
+        .battery-icon::after {
+            content: '';
+            position: absolute;
+            right: -3px;
+            top: 3px;
+            width: 2px;
+            height: 6px;
+            background: white;
+            border-radius: 0 1px 1px 0;
+        }
+        
+        .battery-fill {
+            height: 100%;
+            background: #4CAF50;
+            border-radius: 1px;
+            width: 100%;
+        }
+        
+        .status-center {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+            position: fixed;
+            top: 44px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--primary-blue);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+         .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+        
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 20px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 10px;
+        }
+        
+        .language-selector select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .language-selector select option {
+            background: #2c3e50;
+            color: white;
+        }     
+        /* Search Bar - New Feature */
+        .search-container {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+            position: relative;
+        }
+        
+        .search-bar {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid rgba(0, 122, 255, 0.1);
+            border-radius: 25px;
+            font-size: 16px;
+            background: rgba(0, 122, 255, 0.05);
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        .search-bar:focus {
+            border-color: var(--primary-blue);
+            background: white;
+            box-shadow: 0 4px 20px rgba(0, 122, 255, 0.15);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medium-gray);
+            font-size: 18px;
+        }
+        
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .rating-btn {
+            position: relative;
+            background: var(--gradient-primary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-light);
+        }
+        
+        .rating-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .contact-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-light);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .contact-btn {
+            text-decoration: none !important;
+        }
+        
+        /* Sidebar Menu */
+        .sidebar {
+            position: fixed;
+            top: 104px;
+            right: -300px;
+            width: 300px;
+            height: calc(100vh - 104px);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 998;
+            transition: all 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .sidebar.open {
+            right: 0;
+        }
+        
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 997;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            color: var(--dark-gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .sidebar-item:hover {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateX(-5px);
+        }
+        
+        .sidebar-item i {
+            font-size: 20px;
+            width: 25px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-top: 104px;
+            min-height: calc(100vh - 104px);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23007AFF" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%235AC8FA" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23007AFF" opacity="0.15"/><circle cx="10" cy="50" r="0.5" fill="%235AC8FA" opacity="0.15"/><circle cx="90" cy="30" r="0.5" fill="%23007AFF" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            animation: float 20s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        .hero-title {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            font-family: 'Changa', sans-serif;
+            background: linear-gradient(45deg, #ff0000, #ff8000, #ffff00, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowShift 6s ease-in-out infinite;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            position: relative;
+        }
+        
+        @keyframes rainbowShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        .hero-title:hover {
+            filter: brightness(1.3) drop-shadow(0 0 25px rgba(255, 215, 0, 0.7));
+            transform: scale(1.02);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        /* Stats Section */
+        .stats {
+            background: white;
+            padding: 60px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 30px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.05) 0%, rgba(90, 200, 250, 0.05) 100%);
+            border: 1px solid rgba(0, 122, 255, 0.1);
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+        
+        .stat-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-medium);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1) 0%, rgba(90, 200, 250, 0.1) 100%);
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--medium-gray);
+            font-weight: 500;
+        }
+        
+        /* Services Section */
+        .services {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark-gray);
+            margin-bottom: 20px;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            margin-bottom: 60px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .service-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin: 0 auto 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .adobe-icon-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .service-icon.adobe-icon {
+            background: linear-gradient(135deg, #ff4444 0%, #cc3333 100%);
+            position: relative;
+        }
+        
+        .adobe-emoji {
+            position: absolute;
+            font-size: 2rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            background: #ff4444;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        .adobe-icon-container i {
+            opacity: 0.3;
+            z-index: 1;
+        }
+        
+        .service-icon.design-icon {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            position: relative;
+        }
+        
+        .service-icon.design-icon::before {
+            content: '🎨';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            z-index: 2;
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        .service-icon.code-icon::before {
+            content: '</>';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            z-index: 2;
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        .service-icon.game-icon::before {
+            content: '🎮';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            z-index: 2;
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        @keyframes shimmer {
+            0%, 100% {
+                filter: brightness(1) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+            }
+            50% {
+                filter: brightness(1.3) drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+            }
+        }
+        
+        .service-icon.design-icon::before {
+            content: '🎨';
+            font-size: 2.5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        .service-icon.code-icon {
+            background: linear-gradient(135deg, #4CAF50 0%, #45A049 100%);
+            position: relative;
+        }
+        
+        .service-icon.code-icon::before {
+            content: '</>';
+            font-size: 1.8rem;
+            font-weight: bold;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        .service-icon.game-icon {
+            background: linear-gradient(135deg, #9C27B0 0%, #673AB7 100%);
+            position: relative;
+        }
+        
+        .service-icon.game-icon::before {
+            content: '🎮';
+            font-size: 2.5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-gray);
+            margin-bottom: 15px;
+            font-family: 'Cairo', sans-serif;
+        }
+        
+        .service-description {
+            color: var(--medium-gray);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        
+        /* Reviews Section */
+        .reviews {
+            padding: 80px 20px;
+            background: white;
+        }
+        
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .review-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 30px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .review-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .review-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .review-info h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-gray);
+            margin-bottom: 5px;
+        }
+        
+        .review-info p {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+        }
+        
+        .review-rating {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .star {
+            color: #FFD700;
+            font-size: 1.2rem;
+        }
+        
+        .review-text {
+            color: var(--dark-gray);
+            line-height: 1.8;
+            font-style: italic;
+        }
+        
+        /* Rating Section */
+        .rating-section {
+            padding: 80px 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            text-align: center;
+        }
+        
+        .rating-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .rating-star {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .rating-star:hover,
+        .rating-star.active {
+            color: #FFD700;
+            transform: scale(1.2);
+        }
+        
+        .rating-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            text-align: right;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(0, 122, 255, 0.1);
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .submit-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        /* Contact Section */
+        .contact {
+            padding: 80px 20px;
+            background: white;
+            text-align: center;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 24px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            min-width: 200px;
+            justify-content: center;
+        }
+        
+        .social-link.facebook {
+            background: linear-gradient(135deg, #1877F2 0%, #42A5F5 100%);
+            color: white;
+        }
+        
+        .social-link.instagram {
+            background: linear-gradient(135deg, #E4405F 0%, #FCAF45 100%);
+            color: white;
+        }
+        
+        .social-link.telegram {
+            background: linear-gradient(135deg, #0088CC 0%, #29B6F6 100%);
+            color: white;
+        }
+        
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
+            padding: 40px 20px 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-text {
+            margin-bottom: 20px;
+            color: #ccc;
+        }
+        
+        .admin-link {
+            color: #007AFF;
+            text-decoration: none;
+            font-size: 12px;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .admin-link:hover {
+            opacity: 1;
+        }
+        
+        /* Login Modal */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-form {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        .login-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--medium-gray);
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--dark-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        /* Admin Panel */
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 10000;
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .admin-panel.show {
+            display: block;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .admin-title {
+            color: var(--dark-gray);
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logout-btn {
+            background: #FF3B30;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .admin-tab {
+            background: var(--light-gray);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-tab.active {
+            background: var(--gradient-primary);
+            color: white;
+        }
+        
+        .admin-section {
+            display: none;
+            padding: 20px;
+            background: var(--light-gray);
+            border-radius: 15px;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .admin-section h3 {
+            margin-bottom: 15px;
+            color: var(--dark-gray);
+        }
+        
+        .visitor-count {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-blue);
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .reviews-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .review-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .review-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .approve-btn, .reject-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .approve-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .reject-btn {
+            background: #FF3B30;
+            color: white;
+        }
+        
+        .color-input, .text-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid rgba(0, 122, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .apply-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h4 {
+            color: var(--medium-gray);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .number {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+        
+        .credentials-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .credentials-form .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .credentials-form label {
+            font-weight: 600;
+            color: var(--dark-gray);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .stats {
+                gap: 30px;
+            }
+            
+            .stat-item {
+                min-width: 150px;
+                padding: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .social-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .social-link {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .search-container {
+                display: none;
+            }
+            
+            .navbar {
+                padding: 0 15px;
+            }
+            
+            .admin-tabs {
+                justify-content: center;
+            }
+            
+            .admin-tab {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+        }
+        
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-left">
+            <span id="battery-percentage">100%</span>
+            <div class="battery">
+                <div class="battery-icon">
+                    <div class="battery-fill" id="battery-fill"></div>
+                </div>
+            </div>
+        </div>
+        <div class="status-center">
+            <span id="current-time">16:05</span>
+            <span>بغداد</span>
+        </div>
+        <div class="status-right">
+            <span>4G</span>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-signal"></i>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-left">
+            <button class="menu-btn" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-bar" placeholder="ابحث عن الخدمات...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+        
+        <div class="nav-right">
+            <button class="rating-btn" onclick="scrollToRating()">
+                <i class="fas fa-star"></i>
+            </button>
+            <a href="#contact" class="contact-btn">
+                <i class="fab fa-facebook"></i>
+                تواصل معنا
+            </a>
+        </div>
+    </nav>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar-overlay" onclick="toggleMenu()"></div>
+    <div class="sidebar" id="sidebar">
+        <a href="#home" class="sidebar-item" onclick="toggleMenu()">
+            <i class="fas fa-home"></i>
+            <span>الرئيسية</span>
+        </a>
+        <a href="#services" class="sidebar-item" onclick="toggleMenu()">
+            <i class="fas fa-cogs"></i>
+            <span>الخدمات</span>
+        </a>
+        <a href="#reviews" class="sidebar-item" onclick="toggleMenu()">
+            <i class="fas fa-comments"></i>
+            <span>آراء الزبائن</span>
+        </a>
+        <a href="#rating-section" class="sidebar-item" onclick="toggleMenu()">
+            <i class="fas fa-star"></i>
+            <span>تقييم الموقع</span>
+        </a>
+        <a href="#contact" class="sidebar-item" onclick="toggleMenu()">
+            <i class="fas fa-phone"></i>
+            <span data-translate="contact">تواصل معنا</span>
+        </a>
+        <div class="language-selector sidebar-item">
+            <i class="fas fa-globe"></i>
+            <span data-translate="language">اللغة</span>
+            <select id="language-select" onchange="changeLanguage(this.value)">
+                <option value="ar">العربية</option>
+                <option value="en">English</option>
+                <option value="fa">فارسی</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <h1 class="hero-title">رايزا ستور</h1>
+            <p class="hero-subtitle">أفضل برامج أدوبي وتصاميم احترافية وبرمجة مواقع وشحن ألعاب بأسعار مميزة</p>
+            
+            <div class="hero-buttons">
+                <a href="#services" class="btn-primary">
+                    <i class="fas fa-rocket"></i>
+                    اكتشف خدماتنا
+                </a>
+                <a href="#contact" class="btn-secondary">
+                    <i class="fas fa-phone"></i>
+                    تواصل معنا
+                </a>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats">
+            <div class="stat-item">
+                <div class="stat-number" data-target="3">0</div>
+                <div class="stat-label">سنوات خبرة</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="100">0</div>
+                <div class="stat-label">مشروع مكتمل</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="75">0</div>
+                <div class="stat-label">زبون راضي</div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="services" id="services">
+            <h2 class="section-title">خدماتنا المميزة</h2>
+            <p class="section-subtitle">نقدم مجموعة شاملة من الخدمات الرقمية عالية الجودة لتلبية جميع احتياجاتك</p>
+            
+            <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon adobe-icon">
+                            <div class="adobe-icon-container">
+                                <i class="fas fa-palette"></i>
+                                <span class="adobe-emoji">🖥️</span>
+                            </div>
+                        </div>
+                        <h3 class="service-title">برامج أدوبي الأصلية</h3>
+                        <p class="service-description">جميع برامج Adobe بأحدث الإصدارات مع ضمان الجودة والدعم الفني المتكامل</p>
+                    </div>
+                
+                <div class="service-card">
+                    <div class="service-icon design-icon">
+                        <!-- Design icon with emoji -->
+                    </div>
+                    <h3 class="service-title">تصاميم احترافية</h3>
+                    <p class="service-description">شعارات، هويات بصرية، تصاميم سوشيال ميديا بإبداع وجودة عالمية</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon code-icon">
+                        <!-- Code icon with emoji -->
+                    </div>
+                    <h3 class="service-title">برمجة المواقع</h3>
+                    <p class="service-description">مواقع حديثة ومتجاوبة باستخدام أحدث تقنيات الويب والذكاء الاصطناعي</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon game-icon">
+                        <!-- Game icon with emoji -->
+                    </div>
+                    <h3 class="service-title">شحن الألعاب</h3>
+                    <p class="service-description">شحن سريع وآمن لجميع الألعاب بأسعار منافسة وخدمة عملاء 24/7</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section class="reviews" id="reviews">
+            <h2 class="section-title">آراء زبائننا</h2>
+            <p class="section-subtitle">ما يقوله عملاؤنا عن خدماتنا وجودة عملنا</p>
+            
+            <div class="reviews-grid" id="reviews-container">
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">ز</div>
+                        <div class="review-info">
+                            <h4>زينب أحمد</h4>
+                            <p>صاحبة مشروع تجاري</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">"تجربة رائعة مع فريق رايزا ستور! حصلت على تصميم شعار احترافي لمشروعي الجديد، والنتيجة فاقت توقعاتي بكثير."</p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">خ</div>
+                        <div class="review-info">
+                            <h4>خالد محمد</h4>
+                            <p>مدير شركة تقنية</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">"خدمة ممتازة في برمجة الموقع الإلكتروني! الموقع سريع ومتجاوب ويعمل بشكل مثالي على جميع الأجهزة."</p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">ن</div>
+                        <div class="review-info">
+                            <h4>نورا سالم</h4>
+                            <p>مصممة جرافيك</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">"برامج أدوبي أصلية بأسعار ممتازة! الدعم الفني متاح دائماً ويساعد في حل أي مشكلة بسرعة."</p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">ع</div>
+                        <div class="review-info">
+                            <h4>عمر يوسف</h4>
+                            <p>لاعب محترف</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">"شحن الألعاب سريع وآمن جداً! أصبحت أعتمد عليهم في شحن جميع حساباتي في الألعاب المختلفة."</p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">ل</div>
+                        <div class="review-info">
+                            <h4>ليلى حسن</h4>
+                            <p>مؤثرة على السوشيال ميديا</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">"تصاميم السوشيال ميديا كانت إبداعية ومميزة! زادت من تفاعل متابعيني بشكل ملحوظ."</p>
+                </div>
+                
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="review-avatar">أ</div>
+                        <div class="review-info">
+                            <h4>أحمد علي</h4>
+                            <p>رائد أعمال</p>
+                        </div>
+                    </div>
+                    <div class="review-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                    </div>
+                    <p class="review-text">"فريق محترف ومتعاون! ساعدوني في إنشاء هوية بصرية متكاملة لمشروعي من الألف إلى الياء."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rating Section -->
+        <section class="rating-section" id="rating-section">
+            <h2 class="section-title">قيّم تجربتك معنا</h2>
+            <p class="section-subtitle">رأيك يهمنا! شاركنا تجربتك وساعدنا في تحسين خدماتنا</p>
+            
+            <div class="rating-card">
+                <div class="rating-stars">
+                    <span class="rating-star" data-rating="1">★</span>
+                    <span class="rating-star" data-rating="2">★</span>
+                    <span class="rating-star" data-rating="3">★</span>
+                    <span class="rating-star" data-rating="4">★</span>
+                    <span class="rating-star" data-rating="5">★</span>
+                </div>
+                
+                <form class="rating-form" id="rating-form">
+                    <div class="form-group">
+                        <label for="customer-name">الاسم</label>
+                        <input type="text" id="customer-name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer-job">المهنة</label>
+                        <input type="text" id="customer-job" name="job" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customer-review">رأيك في خدماتنا</label>
+                        <textarea id="customer-review" name="review" placeholder="شاركنا تجربتك مع خدماتنا..." required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-paper-plane"></i>
+                        إرسال التقييم
+                    </button>
+                </form>
+                
+                <div class="success-message" id="success-message">
+                    تم إرسال تقييمك بنجاح! شكراً لك على وقتك الثمين.
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact" id="contact">
+            <h2 class="section-title">تواصل معنا</h2>
+            <p class="section-subtitle">نحن هنا لخدمتك! تواصل معنا عبر قنواتنا المختلفة</p>
+            
+            <div class="social-links">
+                <a href="https://www.facebook.com/share/16fu6CjaDt/" target="_blank" class="social-link facebook">
+                    <i class="fab fa-facebook"></i>
+                    فيسبوك
+                </a>
+                <a href="https://www.instagram.com/rayzaiq?igsh=MWtmajF4ZGx6bG1wdg==" target="_blank" class="social-link instagram">
+                    <i class="fab fa-instagram"></i>
+                    إنستغرام
+                </a>
+                <a href="https://t.me/ReStoiq" target="_blank" class="social-link telegram">
+                    <i class="fab fa-telegram"></i>
+                    تيليجرام
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">© 2024 رايزا ستور - جميع الحقوق محفوظة</p>
+            <a href="#" class="admin-link" onclick="showLogin()">إدارة</a>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="login-modal" id="login-modal">
+        <div class="login-form">
+            <button class="login-close" onclick="hideLogin()">&times;</button>
+            <h3 class="login-title">
+                <i class="fas fa-lock"></i>
+                تسجيل دخول الإدارة
+            </h3>
+            <form id="admin-login-form">
+                <div class="form-group">
+                    <label for="admin-username">اسم المستخدم</label>
+                    <input type="text" id="admin-username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="admin-password">كلمة المرور</label>
+                    <input type="password" id="admin-password" name="password" required>
+                </div>
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    دخول
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="admin-panel">
+        <div class="admin-header">
+            <h2 class="admin-title">لوحة التحكم</h2>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                خروج
+            </button>
+        </div>
+        
+        <div class="admin-tabs">
+            <button class="admin-tab active" onclick="showTab('dashboard')">لوحة المعلومات</button>
+            <button class="admin-tab" onclick="showTab('reviews')">إدارة الآراء</button>
+            <button class="admin-tab" onclick="showTab('settings')">الإعدادات</button>
+            <button class="admin-tab" onclick="showTab('analytics')">التحليلات</button>
+            <button class="admin-tab" onclick="showTab('content')">إدارة المحتوى</button>
+            <button class="admin-tab" onclick="showTab('users')">إدارة المستخدمين</button>
+            <button class="admin-tab" onclick="showTab('security')">الأمان</button>
+        </div>
+        
+        <div class="admin-section active" id="dashboard">
+            <h3>إحصائيات الموقع</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>إجمالي الزوار</h4>
+                    <div class="number" id="total-visitors">419</div>
+                </div>
+                <div class="stat-card">
+                    <h4>المشاريع المكتملة</h4>
+                    <div class="number">56</div>
+                </div>
+                <div class="stat-card">
+                    <h4>آراء معتمدة</h4>
+                    <div class="number" id="approved-reviews">0</div>
+                </div>
+                <div class="stat-card">
+                    <h4>آراء في الانتظار</h4>
+                    <div class="number" id="pending-reviews">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="admin-section" id="reviews">
+            <h3>إدارة آراء الزبائن</h3>
+            <div class="reviews-list" id="pending-reviews-list">
+                <p>لا توجد آراء في الانتظار حالياً</p>
+            </div>
+        </div>
+        
+        <div class="admin-section" id="settings">
+            <h3>إعدادات الموقع</h3>
+            <div style="margin-bottom: 20px;">
+                <h4>الألوان الأساسية</h4>
+                <input type="color" class="color-input" id="primary-color" value="#007AFF">
+                <button class="apply-btn" onclick="applyColors()">تطبيق الألوان</button>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <h4>روابط وسائل التواصل</h4>
+                <input type="url" class="text-input" id="facebook-link" placeholder="رابط فيسبوك">
+                <input type="url" class="text-input" id="instagram-link" placeholder="رابط إنستغرام">
+                <input type="url" class="text-input" id="telegram-link" placeholder="رابط تيليجرام">
+                <button class="apply-btn" onclick="updateSocialLinks()">تحديث الروابط</button>
+            </div>
+        </div>
+        
+        <div class="admin-section" id="analytics">
+            <h3>تحليلات مفصلة</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>الزوار اليوم</h4>
+                    <div class="number">127</div>
+                </div>
+                <div class="stat-card">
+                    <h4>الزوار هذا الأسبوع</h4>
+                    <div class="number">892</div>
+                </div>
+                <div class="stat-card">
+                    <h4>معدل الارتداد</h4>
+                    <div class="number">23%</div>
+                </div>
+                <div class="stat-card">
+                    <h4>متوسط وقت الزيارة</h4>
+                    <div class="number">3:42</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="admin-section" id="content">
+            <h3>إدارة المحتوى</h3>
+            <div style="margin-bottom: 20px;">
+                <h4>العنوان الرئيسي</h4>
+                <input type="text" class="text-input" id="main-title" value="رايزا ستور">
+                <h4>الوصف</h4>
+                <textarea class="text-input" id="main-description" style="height: 100px;">أفضل برامج أدوبي وتصاميم احترافية وبرمجة مواقع وشحن ألعاب بأسعار مميزة</textarea>
+                <button class="apply-btn" onclick="updateContent()">تحديث المحتوى</button>
+            </div>
+        </div>
+        
+        <div class="admin-section" id="users">
+            <h3>إدارة المستخدمين</h3>
+            <div style="margin-bottom: 20px;">
+                <h4>إضافة مستخدم جديد</h4>
+                <input type="text" class="text-input" id="new-username" placeholder="اسم المستخدم">
+                <input type="password" class="text-input" id="new-password" placeholder="كلمة المرور">
+                <input type="email" class="text-input" id="new-email" placeholder="البريد الإلكتروني">
+                <button class="apply-btn" onclick="addUser()">إضافة مستخدم</button>
+            </div>
+        </div>
+        
+        <div class="admin-section" id="security">
+            <h3>إعدادات الأمان</h3>
+            <div class="credentials-form">
+                <h4>تغيير بيانات تسجيل الدخول</h4>
+                <div class="form-group">
+                    <label>اسم المستخدم الحالي</label>
+                    <input type="text" class="text-input" id="current-username" value="rayza_admin" readonly>
+                </div>
+                <div class="form-group">
+                    <label>اسم المستخدم الجديد</label>
+                    <input type="text" class="text-input" id="new-admin-username" placeholder="اسم المستخدم الجديد">
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور الحالية</label>
+                    <input type="password" class="text-input" id="current-admin-password" placeholder="كلمة المرور الحالية">
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور الجديدة</label>
+                    <input type="password" class="text-input" id="new-admin-password" placeholder="كلمة المرور الجديدة">
+                </div>
+                <div class="form-group">
+                    <label>تأكيد كلمة المرور الجديدة</label>
+                    <input type="password" class="text-input" id="confirm-admin-password" placeholder="تأكيد كلمة المرور">
+                </div>
+                <button class="apply-btn" onclick="updateCredentials()">تحديث بيانات الدخول</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentRating = 0;
+        let visitorCount = parseInt(localStorage.getItem('visitorCount') || '419');
+        let pendingReviews = JSON.parse(localStorage.getItem('pendingReviews') || '[]');
+        let approvedReviews = JSON.parse(localStorage.getItem('approvedReviews') || '[]');
+        let adminCredentials = JSON.parse(localStorage.getItem('adminCredentials') || '{"username": "rayza_admin", "password": "rayza2024@store"}');
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTime();
+            updateBattery();
+            animateStats();
+            updateVisitorCount();
+            updateReviewsDisplay();
+            
+            setInterval(updateTime, 1000);
+            setInterval(updateBattery, 30000);
+        });
+
+        // Time and battery functions
+        function updateTime() {
+            const now = new Date();
+            const baghdadTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Baghdad"}));
+            const hours = baghdadTime.getHours();
+            const minutes = baghdadTime.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours % 12 || 12;
+            document.getElementById('current-time').textContent = `${displayHours}:${minutes}`;
+        }
+
+        function updateBattery() {
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then(function(battery) {
+                    const percentage = Math.round(battery.level * 100);
+                    document.getElementById('battery-percentage').textContent = percentage + '%';
+                    document.getElementById('battery-fill').style.width = percentage + '%';
+                    
+                    if (percentage < 20) {
+                        document.getElementById('battery-fill').style.background = '#FF3B30';
+                    } else if (percentage < 50) {
+                        document.getElementById('battery-fill').style.background = '#FF9500';
+                    } else {
+                        document.getElementById('battery-fill').style.background = '#4CAF50';
+                    }
+                });
+            } else {
+                // Fallback for browsers that don't support Battery API
+                const randomPercentage = Math.floor(Math.random() * 40) + 60; // 60-100%
+                document.getElementById('battery-percentage').textContent = randomPercentage + '%';
+                document.getElementById('battery-fill').style.width = randomPercentage + '%';
+            }
+        }
+
+
+
+        // Menu functions
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        // Scroll to rating section
+        function scrollToRating() {
+            document.getElementById('rating-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Stats animation
+        function animateStats() {
+            const statNumbers = document.querySelectorAll('.stat-number');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = parseInt(entry.target.getAttribute('data-target'));
+                        animateNumber(entry.target, target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            statNumbers.forEach(stat => observer.observe(stat));
+        }
+
+        function animateNumber(element, target) {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 40);
+        }
+
+        // Rating system
+        document.querySelectorAll('.rating-star').forEach(star => {
+            star.addEventListener('click', function() {
+                currentRating = parseInt(this.getAttribute('data-rating'));
+                updateStars();
+            });
+            
+            star.addEventListener('mouseover', function() {
+                const rating = parseInt(this.getAttribute('data-rating'));
+                highlightStars(rating);
+            });
+        });
+
+        document.querySelector('.rating-stars').addEventListener('mouseleave', function() {
+            updateStars();
+        });
+
+        function updateStars() {
+            highlightStars(currentRating);
+        }
+
+        function highlightStars(rating) {
+            document.querySelectorAll('.rating-star').forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        // Rating form submission
+        document.getElementById('rating-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (currentRating === 0) {
+                alert('يرجى اختيار تقييم أولاً');
+                return;
+            }
+            
+            const formData = new FormData(this);
+            const review = {
+                id: Date.now(),
+                name: formData.get('name'),
+                job: formData.get('job'),
+                review: formData.get('review'),
+                rating: currentRating,
+                date: new Date().toLocaleDateString('ar-SA'),
+                approved: false
+            };
+            
+            pendingReviews.push(review);
+            localStorage.setItem('pendingReviews', JSON.stringify(pendingReviews));
+            
+            // Show success message
+            document.getElementById('success-message').classList.add('show');
+            this.reset();
+            currentRating = 0;
+            updateStars();
+            updateReviewsDisplay();
+            
+            setTimeout(() => {
+                document.getElementById('success-message').classList.remove('show');
+            }, 3000);
+        });
+
+        // Visitor count
+        function updateVisitorCount() {
+            if (!localStorage.getItem('hasVisited')) {
+                visitorCount++;
+                localStorage.setItem('visitorCount', visitorCount.toString());
+                localStorage.setItem('hasVisited', 'true');
+            }
+            
+            document.getElementById('total-visitors').textContent = visitorCount;
+        }
+
+        // Admin functions
+        function showLogin() {
+            document.getElementById('login-modal').classList.add('show');
+        }
+
+        function hideLogin() {
+            document.getElementById('login-modal').classList.remove('show');
+        }
+
+        document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            
+            if (username === adminCredentials.username && password === adminCredentials.password) {
+                hideLogin();
+                showAdminPanel();
+                this.reset();
+            } else {
+                alert('بيانات تسجيل الدخول غير صحيحة');
+            }
+        });
+
+        function showAdminPanel() {
+            document.getElementById('admin-panel').classList.add('show');
+            updateReviewsDisplay();
+        }
+
+        function logout() {
+            document.getElementById('admin-panel').classList.remove('show');
+        }
+
+        function showTab(tabName) {
+            // Hide all sections
+            document.querySelectorAll('.admin-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected section and activate tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function updateReviewsDisplay() {
+            const pendingList = document.getElementById('pending-reviews-list');
+            const pendingCount = document.getElementById('pending-reviews');
+            const approvedCount = document.getElementById('approved-reviews');
+            
+            if (pendingReviews.length === 0) {
+                pendingList.innerHTML = '<p>لا توجد آراء في الانتظار حالياً</p>';
+            } else {
+                pendingList.innerHTML = pendingReviews.map(review => `
+                    <div class="review-item">
+                        <strong>${review.name}</strong> - ${review.job}
+                        <div class="review-rating">
+                            ${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}
+                        </div>
+                        <p>${review.review}</p>
+                        <div class="review-actions">
+                            <button class="approve-btn" onclick="approveReview(${review.id})">موافقة</button>
+                            <button class="reject-btn" onclick="rejectReview(${review.id})">رفض</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            pendingCount.textContent = pendingReviews.length;
+            approvedCount.textContent = approvedReviews.length;
+        }
+
+        function approveReview(reviewId) {
+            const reviewIndex = pendingReviews.findIndex(r => r.id === reviewId);
+            if (reviewIndex !== -1) {
+                const review = pendingReviews.splice(reviewIndex, 1)[0];
+                review.approved = true;
+                approvedReviews.push(review);
+                
+                localStorage.setItem('pendingReviews', JSON.stringify(pendingReviews));
+                localStorage.setItem('approvedReviews', JSON.stringify(approvedReviews));
+                
+                updateReviewsDisplay();
+                addReviewToPage(review);
+            }
+        }
+
+        function rejectReview(reviewId) {
+            const reviewIndex = pendingReviews.findIndex(r => r.id === reviewId);
+            if (reviewIndex !== -1) {
+                pendingReviews.splice(reviewIndex, 1);
+                localStorage.setItem('pendingReviews', JSON.stringify(pendingReviews));
+                updateReviewsDisplay();
+            }
+        }
+
+        function addReviewToPage(review) {
+            const reviewsContainer = document.getElementById('reviews-container');
+            const reviewCard = document.createElement('div');
+            reviewCard.className = 'review-card';
+            reviewCard.innerHTML = `
+                <div class="review-header">
+                    <div class="review-avatar">${review.name.charAt(0)}</div>
+                    <div class="review-info">
+                        <h4>${review.name}</h4>
+                        <p>${review.job}</p>
+                    </div>
+                </div>
+                <div class="review-rating">
+                    ${'<span class="star">★</span>'.repeat(review.rating)}
+                </div>
+                <p class="review-text">"${review.review}"</p>
+            `;
+            reviewsContainer.appendChild(reviewCard);
+        }
+
+        // Settings functions
+        function applyColors() {
+            const primaryColor = document.getElementById('primary-color').value;
+            document.documentElement.style.setProperty('--primary-blue', primaryColor);
+            localStorage.setItem('primaryColor', primaryColor);
+        }
+
+        function updateSocialLinks() {
+            const facebook = document.getElementById('facebook-link').value;
+            const instagram = document.getElementById('instagram-link').value;
+            const telegram = document.getElementById('telegram-link').value;
+            
+            // Update links in the page
+            const socialLinks = {
+                facebook: facebook,
+                instagram: instagram,
+                telegram: telegram
+            };
+            
+            localStorage.setItem('socialLinks', JSON.stringify(socialLinks));
+            alert('تم تحديث الروابط بنجاح');
+        }
+
+        function updateContent() {
+            const title = document.getElementById('main-title').value;
+            const description = document.getElementById('main-description').value;
+            
+            document.querySelector('.hero-title').textContent = title;
+            document.querySelector('.hero-subtitle').textContent = description;
+            
+            localStorage.setItem('mainTitle', title);
+            localStorage.setItem('mainDescription', description);
+            alert('تم تحديث المحتوى بنجاح');
+        }
+
+        function addUser() {
+            const username = document.getElementById('new-username').value;
+            const password = document.getElementById('new-password').value;
+            const email = document.getElementById('new-email').value;
+            
+            if (username && password && email) {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                users.push({ username, password, email, created: new Date().toISOString() });
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                document.getElementById('new-username').value = '';
+                document.getElementById('new-password').value = '';
+                document.getElementById('new-email').value = '';
+                
+                alert('تم إضافة المستخدم بنجاح');
+            } else {
+                alert('يرجى ملء جميع الحقول');
+            }
+        }
+
+        function updateCredentials() {
+            const currentPassword = document.getElementById('current-admin-password').value;
+            const newUsername = document.getElementById('new-admin-username').value;
+            const newPassword = document.getElementById('new-admin-password').value;
+            const confirmPassword = document.getElementById('confirm-admin-password').value;
+            
+            if (currentPassword !== adminCredentials.password) {
+                alert('كلمة المرور الحالية غير صحيحة');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('كلمة المرور الجديدة غير متطابقة');
+                return;
+            }
+            
+            if (newUsername) {
+                adminCredentials.username = newUsername;
+                document.getElementById('current-username').value = newUsername;
+            }
+            
+            if (newPassword) {
+                adminCredentials.password = newPassword;
+            }
+            
+            localStorage.setItem('adminCredentials', JSON.stringify(adminCredentials));
+            
+            // Clear form
+            document.getElementById('current-admin-password').value = '';
+            document.getElementById('new-admin-username').value = '';
+            document.getElementById('new-admin-password').value = '';
+            document.getElementById('confirm-admin-password').value = '';
+            
+            alert('تم تحديث بيانات الدخول بنجاح');
+        }
+
+        // Load saved settings on page load
+        window.addEventListener('load', function() {
+            const savedColor = localStorage.getItem('primaryColor');
+            if (savedColor) {
+                document.documentElement.style.setProperty('--primary-blue', savedColor);
+                document.getElementById('primary-color').value = savedColor;
+            }
+            
+            const savedTitle = localStorage.getItem('mainTitle');
+            const savedDescription = localStorage.getItem('mainDescription');
+            
+            if (savedTitle) {
+                document.querySelector('.hero-title').textContent = savedTitle;
+                document.getElementById('main-title').value = savedTitle;
+            }
+            
+            if (savedDescription) {
+                document.querySelector('.hero-subtitle').textContent = savedDescription;
+                document.getElementById('main-description').value = savedDescription;
+            }
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Language translations
+        const translations = {
+            ar: {
+                'site-title': 'رايزا ستور',
+                'site-subtitle': 'أفضل برامج أدوبي وتصاميم احترافية وبرمجة مواقع وشحن ألعاب بأسعار مميزة',
+                'services': 'الخدمات',
+                'reviews': 'آراء الزبائن',
+                'rating': 'تقييم الموقع',
+                'contact': 'تواصل معنا',
+                'language': 'اللغة',
+                'discover-services': 'اكتشف خدماتنا',
+                'contact-us': 'تواصل معنا',
+                'years-experience': 'سنوات خبرة',
+                'completed-projects': 'مشروع مكتمل',
+                'satisfied-clients': 'زبون راضي',
+                'our-services': 'خدماتنا المميزة',
+                'services-subtitle': 'نقدم مجموعة شاملة من الخدمات الرقمية عالية الجودة لتلبية جميع احتياجاتك',
+                'adobe-programs': 'برامج أدوبي الأصلية',
+                'adobe-desc': 'جميع برامج Adobe بأحدث الإصدارات مع ضمان الجودة والدعم الفني المتكامل',
+                'professional-designs': 'تصاميم احترافية',
+                'designs-desc': 'شعارات، هويات بصرية، تصاميم سوشيال ميديا بإبداع وجودة عالمية',
+                'web-development': 'برمجة المواقع',
+                'web-desc': 'مواقع حديثة ومتجاوبة باستخدام أحدث تقنيات الويب والذكاء الاصطناعي',
+                'game-charging': 'شحن الألعاب',
+                'game-desc': 'شحن سريع وآمن لجميع الألعاب بأسعار منافسة وخدمة عملاء 24/7'
+            },
+            en: {
+                'site-title': 'Rayza Store',
+                'site-subtitle': 'Best Adobe programs, professional designs, web development and game charging at competitive prices',
+                'services': 'Services',
+                'reviews': 'Customer Reviews',
+                'rating': 'Rate Website',
+                'contact': 'Contact Us',
+                'language': 'Language',
+                'discover-services': 'Discover Our Services',
+                'contact-us': 'Contact Us',
+                'years-experience': 'Years Experience',
+                'completed-projects': 'Completed Projects',
+                'satisfied-clients': 'Satisfied Clients',
+                'our-services': 'Our Distinguished Services',
+                'services-subtitle': 'We provide a comprehensive range of high-quality digital services to meet all your needs',
+                'adobe-programs': 'Original Adobe Programs',
+                'adobe-desc': 'All Adobe programs with latest versions with quality guarantee and integrated technical support',
+                'professional-designs': 'Professional Designs',
+                'designs-desc': 'Logos, visual identities, social media designs with creativity and global quality',
+                'web-development': 'Web Development',
+                'web-desc': 'Modern and responsive websites using the latest web technologies and artificial intelligence',
+                'game-charging': 'Game Charging',
+                'game-desc': 'Fast and secure charging for all games at competitive prices and 24/7 customer service'
+            },
+            fa: {
+                'site-title': 'فروشگاه رایزا',
+                'site-subtitle': 'بهترین برنامه‌های ادوبی، طراحی‌های حرفه‌ای، توسعه وب و شارژ بازی با قیمت‌های رقابتی',
+                'services': 'خدمات',
+                'reviews': 'نظرات مشتریان',
+                'rating': 'امتیاز وب‌سایت',
+                'contact': 'تماس با ما',
+                'language': 'زبان',
+                'discover-services': 'خدمات ما را کشف کنید',
+                'contact-us': 'تماس با ما',
+                'years-experience': 'سال تجربه',
+                'completed-projects': 'پروژه تکمیل شده',
+                'satisfied-clients': 'مشتری راضی',
+                'our-services': 'خدمات متمایز ما',
+                'services-subtitle': 'ما طیف جامعی از خدمات دیجیتال با کیفیت بالا برای برآوردن تمام نیازهای شما ارائه می‌دهیم',
+                'adobe-programs': 'برنامه‌های اصلی ادوبی',
+                'adobe-desc': 'تمام برنامه‌های ادوبی با آخرین نسخه‌ها با ضمانت کیفیت و پشتیبانی فنی یکپارچه',
+                'professional-designs': 'طراحی‌های حرفه‌ای',
+                'designs-desc': 'لوگو، هویت بصری، طراحی رسانه‌های اجتماعی با خلاقیت و کیفیت جهانی',
+                'web-development': 'توسعه وب',
+                'web-desc': 'وب‌سایت‌های مدرن و واکنش‌گرا با استفاده از جدیدترین فناوری‌های وب و هوش مصنوعی',
+                'game-charging': 'شارژ بازی',
+                'game-desc': 'شارژ سریع و امن برای تمام بازی‌ها با قیمت‌های رقابتی و خدمات مشتری ۲۴/۷'
+            }
+        };
+
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+            
+            // Change direction for Arabic and Persian
+            if (lang === 'ar' || lang === 'fa') {
+                document.body.style.direction = 'rtl';
+            } else {
+                document.body.style.direction = 'ltr';
+            }
+            
+            localStorage.setItem('selectedLanguage', lang);
+        }
+
+        // Load saved language on page load
+        window.addEventListener('load', function() {
+            const savedLanguage = localStorage.getItem('selectedLanguage') || 'ar';
+            document.getElementById('language-select').value = savedLanguage;
+            changeLanguage(savedLanguage);
+        });
+
+        // Smooth scroll function for buttons
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+        document.getElementById("discover-services-btn").addEventListener("click", function() {
+            scrollToSection("services");
+        });
+
+        document.getElementById("contact-us-btn").addEventListener("click", function() {
+            scrollToSection("contact");
+        });
+    </script>
+
